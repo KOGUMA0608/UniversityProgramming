@@ -1,8 +1,6 @@
 package Two.LatterTerm.DataStructurePractice.ex2;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class SortScoreComparator {
     public static void main(String[] args) {
@@ -22,7 +20,7 @@ public class SortScoreComparator {
             System.out.println(s.getName() + " : Math: " + s.getMath() + " : English : " + s.getEnglish());
         }
 
-        Collections.sort(score, new ScoreComparator());
+        //Collections.sort(score, new ScoreComparator());
 
         System.out.println("ソート後");
         for (Score2 s : score) {
@@ -55,7 +53,7 @@ class Score2 {
     }
 }
 
-class ScoreComparator implements Comparator<Score2> {
+/*class ScoreComparator implements Comparator<Score2> {
     // ここを作る
     // 順序付けは以下の通り
     // 1. 数学が良い順とする
@@ -64,4 +62,4 @@ class ScoreComparator implements Comparator<Score2> {
     public int compare(Music2 music1, Music2 music2) {
         return music1.getTitle().compareTo(music2.getTitle());
     }
-}
+}*/
