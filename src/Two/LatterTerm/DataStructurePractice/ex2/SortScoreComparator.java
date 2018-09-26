@@ -3,6 +3,7 @@ package Two.LatterTerm.DataStructurePractice.ex2;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Objects;
 
 public class SortScoreComparator {
     public static void main(String[] args) {
@@ -23,6 +24,7 @@ public class SortScoreComparator {
         }
 
         Collections.sort(score, new ScoreComparator());
+
 
         System.out.println("ソート後");
         for (Score2 s : score) {
@@ -67,8 +69,13 @@ class ScoreComparator implements Comparator<Score2> {
     // 2. 数学が同点の場合は英語が良い順
     // 3. それでも順位が付かない場合は同位とする
     public int compare(Score2 input, Score2 opponentinput) {
-        math=(Integer)input.getMath();
-        opponentsmath=(Integer)opponentinput.getMath();
+        math = (Integer) input.getMath();
+        opponentsmath = (Integer) opponentinput.getMath();
         return math.compareTo(opponentsmath);
+        if (Objects.equals(math, opponentsmath)) {
+            english = (Integer) input.getEnglish();
+            opponentsenglish = (Integer) opponentinput.getEnglish();
+            return english.compareTo(opponentsenglish);
+        }
     }
 }
