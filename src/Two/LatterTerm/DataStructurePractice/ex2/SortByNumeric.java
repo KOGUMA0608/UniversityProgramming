@@ -19,27 +19,36 @@ public class SortByNumeric {
         list.add("11");
 
         System.out.println("ソート前");
-        for(String str: list) {
+        for (String str : list) {
             System.out.println(str);
         }
 
         Collections.sort(list);
 
         System.out.println("ソート後");
-        for(String str: list) {
+        for (String str : list) {
             System.out.println(str);
         }
 
         Collections.sort(list, new NumericComparator());
 
         System.out.println("順序付けを変更後");
-        for (String str: list) {
+        for (String str : list) {
             System.out.println(str);
         }
     }
 }
+
+
 class NumericComparator implements Comparator<String> {
-    // ここを作る
-    // Stringのソートは辞書順になるが，
-    // 数値順となるように順序付けする
+    private Integer num1;
+    private Integer num2;
+
+    public int compare(String number1, String number2) {
+        num1 = Integer.parseInt(number1);
+        num2 = Integer.parseInt(number2);
+        return num1.compareTo(num2);
+    }
 }
+
+
