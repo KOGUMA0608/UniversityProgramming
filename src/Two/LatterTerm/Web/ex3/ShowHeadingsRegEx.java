@@ -44,7 +44,7 @@ public class ShowHeadingsRegEx {
             System.out.println(e);
         }
         for (int i = 0; i < input.size(); i++) {
-            Pattern pattern = Pattern.compile("<h1>|<h2>|<h3>|<h4>|<h5>|<h6>");  // グループの指定が1つ(1番目)
+            Pattern pattern = Pattern.compile("<h1>|<h2>|<h3>|<h4>|<h5>|<h6>");
             Matcher matcher = pattern.matcher((String)input.get(i));
             if (matcher.find()) {
                 System.out.println((String) input.get(i));
