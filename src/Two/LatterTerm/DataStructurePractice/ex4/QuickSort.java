@@ -45,7 +45,7 @@ public class QuickSort {
             a[right] = tmp;
         }
         int tmp2 = a[left];
-        pivot=left;
+        pivot = left;
         a[left] = a[r];
         a[r] = tmp2;
         return pivot;
@@ -83,7 +83,7 @@ public class QuickSort {
     }
 
     public static void main(String[] args) {
-        String file1 = "reverse2.txt";
+        String file1 = "same2.txt";
         String file2 = "result_ex4-1_sorted2.txt";
 
         QuickSort qs = new QuickSort(file1);
