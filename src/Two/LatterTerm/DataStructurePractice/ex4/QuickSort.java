@@ -28,17 +28,17 @@ public class QuickSort {
         // ここを作る
         // クイックソートにおける分割を行う
         //前半の部分のピボットの位置(i)
+        /*
         int p = a[r];
         int left = l;
         int right = r;
         int pivot;
-
-        while (left < right) {
-            for (; a[left] < p || (left < right); left++) {
-                left = left++;
+        while (left > right) {
+            while (a[left] < p || (left < right)) {
+                left = left + 1;
             }
-            for (; a[right] > p || (left < right); right--) {
-                right = right--;
+            while (a[right] > p || (left < right)) {
+                right = right - 1;
             }
             int tmp = a[left];
             a[left] = a[right];
@@ -49,21 +49,49 @@ public class QuickSort {
         a[left] = a[r];
         a[r] = tmp2;
         return pivot;
+        */
+        return (r - l) / 2 + l;
     }
 
-    private void quicksort(int l, int r) {
+    private void quicksort(int[] a, int l, int r) {
         // ここを作る
         // クイックソートを実装する
         // 配列aの中身をソートする
         if (l >= r) {
             return;
         }
-        quicksort(l, partition(l, r));//前半
-        quicksort(partition(l, r) + 1, r);//後半
+        int fronthalf = a.length / 2;
+        int rearhalf = a.length / 2;
+        if (a.length % 2 == 1) {
+            fronthalf =a.length / 2 +1;
+        }
+        int[] frontline = new int[fronthalf];
+        int frontindex = 0;
+        int[] rearline = new int[rearhalf];
+        int rearindex = 0;
+
+        int[] marge = new int[frontline.length + rearline.length];
+        for (int i = 0; i < a.length; i++) {
+            if (a[i] <= a[r]) {
+                frontline[frontindex] = a[i];
+                frontindex++;
+            } else {
+                rearline[rearindex] = a[i];
+                rearindex++;
+            }
+        }
+        for (int j = 0; j < frontline.length; j++) {
+            a[j] = frontline[j];
+        }
+        for (int k = 0; k < rearline.length; k++) {
+            a[k + frontline.length] = rearline[k];
+        }
+        quicksort(a, l, partition(l, r) - 1);//前半
+        quicksort(a, partition(l, r) + 1, r);//後半
     }
 
     public void sort() {
-        quicksort(0, a.length - 1);
+        quicksort(a, 0, a.length - 1);
     }
 
     public void output(String filename) {
@@ -83,7 +111,7 @@ public class QuickSort {
     }
 
     public static void main(String[] args) {
-        String file1 = "same2.txt";
+        String file1 = "rand2.txt";
         String file2 = "result_ex4-1_sorted2.txt";
 
         QuickSort qs = new QuickSort(file1);

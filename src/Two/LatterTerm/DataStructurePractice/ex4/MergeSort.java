@@ -33,14 +33,13 @@ public class MergeSort {
         int rearhalf=a.length/2;
         if(a.length%2!=0){
             fronthalf=a.length/2+1;
-            rearhalf=a.length/2-1;
+            rearhalf=a.length/2;
         }
         if (a.length <= 1) {
             return;
         }
         int[] frontline = new int[fronthalf];
         int[] rearline = new int[rearhalf];
-
 
         for (int i = 0; i < fronthalf; i++) {
             frontline[i] = a[i];
@@ -51,27 +50,27 @@ public class MergeSort {
         mergesort(frontline);
         mergesort(rearline);
 
-        //int[] merge = new int[a.length];
-        for (int i = 0; i < a.length; ) {//???
+        int[] merge = new int[fronthalf+rearhalf];
+        for (int i = 0; i < merge.length; ) {
             int frontindex = 0;
             int rearindex = 0;
             while (frontindex < frontline.length && rearindex < rearline.length) {
                 if (frontline[frontindex] <= rearline[rearindex]) {
-                    a[i] = frontline[frontindex];
+                    merge[i] = frontline[frontindex];
                     frontindex++;
                     i++;
                 } else {
-                    a[i] = rearline[rearindex];
+                    merge[i] = rearline[rearindex];
                     rearindex++;
                     i++;
                 }
             }
             for (; frontindex < frontline.length;frontindex++ ) {
-                a[i] = frontline[frontindex];
+                merge[i] = frontline[frontindex];
                 i++;
             }
             for (; rearindex < rearline.length;rearindex++ ) {
-                a[i] = rearline[rearindex];
+                merge[i] = rearline[rearindex];
                 i++;
             }
             /*
@@ -86,6 +85,9 @@ public class MergeSort {
                 i++;
             }
             */
+        }
+        for (int i=0;i<merge.length;i++){
+            a[i]=merge[i];
         }
         //列aを2つの列x, yに分割する
 
