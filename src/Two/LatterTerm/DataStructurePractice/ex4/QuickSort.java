@@ -65,9 +65,9 @@ public class QuickSort {
         if (a.length % 2 == 1) {
             fronthalf =a.length / 2 +1;
         }
-        int[] frontline = new int[fronthalf];
+        int[] frontline = new int[a.length];
         int frontindex = 0;
-        int[] rearline = new int[rearhalf];
+        int[] rearline = new int[a.length];
         int rearindex = 0;
 
         int[] marge = new int[frontline.length + rearline.length];
@@ -80,11 +80,11 @@ public class QuickSort {
                 rearindex++;
             }
         }
-        for (int j = 0; j < frontline.length; j++) {
+        for (int j = 0; j<frontindex; j++) {
             a[j] = frontline[j];
         }
-        for (int k = 0; k < rearline.length; k++) {
-            a[k + frontline.length] = rearline[k];
+        for (int k = 0; k < rearindex; k++) {
+            a[k + frontindex] = rearline[k];
         }
         quicksort(a, l, partition(l, r) - 1);//前半
         quicksort(a, partition(l, r) + 1, r);//後半

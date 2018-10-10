@@ -29,11 +29,11 @@ public class MergeSort {
         // ここを作る
         // マージソートを実装する
         // 配列aの中身をソートする
-        int fronthalf=a.length/2;
-        int rearhalf=a.length/2;
-        if(a.length%2!=0){
-            fronthalf=a.length/2+1;
-            rearhalf=a.length/2;
+        int fronthalf = a.length / 2;
+        int rearhalf = a.length / 2;
+        if (a.length % 2 != 0) {
+            fronthalf = a.length / 2 + 1;
+            rearhalf = a.length / 2;
         }
         if (a.length <= 1) {
             return;
@@ -50,7 +50,7 @@ public class MergeSort {
         mergesort(frontline);
         mergesort(rearline);
 
-        int[] merge = new int[fronthalf+rearhalf];
+        int[] merge = new int[fronthalf + rearhalf];
         for (int i = 0; i < merge.length; ) {
             int frontindex = 0;
             int rearindex = 0;
@@ -65,11 +65,11 @@ public class MergeSort {
                     i++;
                 }
             }
-            for (; frontindex < frontline.length;frontindex++ ) {
+            for (; frontindex < frontline.length; frontindex++) {
                 merge[i] = frontline[frontindex];
                 i++;
             }
-            for (; rearindex < rearline.length;rearindex++ ) {
+            for (; rearindex < rearline.length; rearindex++) {
                 merge[i] = rearline[rearindex];
                 i++;
             }
@@ -86,8 +86,8 @@ public class MergeSort {
             }
             */
         }
-        for (int i=0;i<merge.length;i++){
-            a[i]=merge[i];
+        for (int i = 0; i < merge.length; i++) {
+            a[i] = merge[i];
         }
         //列aを2つの列x, yに分割する
 
