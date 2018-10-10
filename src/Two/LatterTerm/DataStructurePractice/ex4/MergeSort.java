@@ -29,24 +29,30 @@ public class MergeSort {
         // ここを作る
         // マージソートを実装する
         // 配列aの中身をソートする
-        int[] frontline = new int[a.length / 2];
-        int[] rearline = new int[a.length / 2];
-
+        int fronthalf=a.length/2;
+        int rearhalf=a.length/2;
+        if(a.length%2!=0){
+            fronthalf=a.length/2+1;
+            rearhalf=a.length/2-1;
+        }
         if (a.length <= 1) {
             return;
         }
-        for (int i = 0; i < a.length / 2; i++) {
+        int[] frontline = new int[fronthalf];
+        int[] rearline = new int[rearhalf];
+
+
+        for (int i = 0; i < fronthalf; i++) {
             frontline[i] = a[i];
         }
-        for (int j = 0; j < a.length / 2; j++) {
-            rearline[j] = a[j + a.length / 2];
+        for (int j = 0; j < rearhalf; j++) {
+            rearline[j] = a[j + fronthalf];
         }
         mergesort(frontline);
         mergesort(rearline);
 
-
         //int[] merge = new int[a.length];
-        for (int i = 0; i < a.length-1; ) {//???
+        for (int i = 0; i < a.length; ) {//???
             int frontindex = 0;
             int rearindex = 0;
             while (frontindex < frontline.length && rearindex < rearline.length) {
