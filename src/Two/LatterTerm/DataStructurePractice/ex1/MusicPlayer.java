@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class MusicPlayer {
-    ArrayList<Album> albumlist = new ArrayList<>();
+    ArrayList<Album> albumlist = new ArrayList<Album>();
     private String name;
 
     public MusicPlayer(String name) {

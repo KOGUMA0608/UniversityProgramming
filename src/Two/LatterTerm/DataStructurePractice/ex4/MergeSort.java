@@ -1,7 +1,6 @@
 package Two.LatterTerm.DataStructurePractice.ex4;
 
 import java.io.*;
-import java.util.Scanner;
 
 public class MergeSort {
 
@@ -26,15 +25,63 @@ public class MergeSort {
         }
     }
 
-    private void mergesort(int low, int high) {
+    private void mergesort(int[] a) {
         // ここを作る
         // マージソートを実装する
         // 配列aの中身をソートする
-        int[] frontline;
-        int[] rearline;
-        if (a.length == 1) return;                 // (1)
-        //列aを2つの列x, yに分割する
+        int[] frontline = new int[a.length / 2];
+        int[] rearline = new int[a.length / 2];
 
+        if (a.length <= 1) {
+            return;
+        }
+        for (int i = 0; i < a.length / 2; i++) {
+            frontline[i] = a[i];
+        }
+        for (int j = 0; j < a.length / 2; j++) {
+            rearline[j] = a[j + a.length / 2];
+        }
+        mergesort(frontline);
+        mergesort(rearline);
+
+
+        //int[] merge = new int[a.length];
+        for (int i = 0; i < a.length-1; ) {//???
+            int frontindex = 0;
+            int rearindex = 0;
+            while (frontindex < frontline.length && rearindex < rearline.length) {
+                if (frontline[frontindex] <= rearline[rearindex]) {
+                    a[i] = frontline[frontindex];
+                    frontindex++;
+                    i++;
+                } else {
+                    a[i] = rearline[rearindex];
+                    rearindex++;
+                    i++;
+                }
+            }
+            for (; frontindex < frontline.length;frontindex++ ) {
+                a[i] = frontline[frontindex];
+                i++;
+            }
+            for (; rearindex < rearline.length;rearindex++ ) {
+                a[i] = rearline[rearindex];
+                i++;
+            }
+            /*
+            if (frontindex < frontline.length) {
+                a[i] = frontline[frontindex];
+                frontindex++;
+                i++;
+            }
+            if (rearindex < rearline.length) {
+                a[i] = rearline[rearindex];
+                rearindex++;
+                i++;
+            }
+            */
+        }
+        //列aを2つの列x, yに分割する
 
         //mergesortを再帰呼び出しで，列xをソートする // (3)
         //mergesortを再帰呼び出しで，列yをソートする // (4)
@@ -42,7 +89,7 @@ public class MergeSort {
     }
 
     public void sort() {
-        mergesort(0, a.length - 1);
+        mergesort(a);
     }
 
     public void output(String filename) {

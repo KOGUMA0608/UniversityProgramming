@@ -3,7 +3,7 @@ package Two.LatterTerm.DataStructurePractice.ex1;
 import java.util.ArrayList;
 
 public class Album {
-    ArrayList<Music> musiclist = new ArrayList<>();
+    ArrayList<Music> musiclist = new ArrayList<Music>();
     private String title;
     private String artist;
 
