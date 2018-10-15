@@ -4,8 +4,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 public class QueueByLinkedList {
-    public static void main(String args[]) {
-        //Deque<String> list=new ArrayDeque<String>();
+    public static void main(String args[]) {//Deque<String> list=new ArrayDeque<String>();
         Deque<String> list = new LinkedList<String>();
         list.offer("Alice");
         System.out.println("入力された値は" + list.getLast());//入力された値を表示する(削除はしない)
