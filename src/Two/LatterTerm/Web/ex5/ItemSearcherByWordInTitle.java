@@ -2,6 +2,7 @@ package Two.LatterTerm.Web.ex5;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.w3c.dom.bootstrap.DOMImplementationRegistry;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSInput;
@@ -10,12 +11,12 @@ import org.w3c.dom.ls.LSParser;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import javax.xml.xpath.*;
 
 public class ItemSearcherByWordInTitle {
+
     public static void main(String[] args) {
-        ItemSearcherByWordInTitle viewer = new ItemSearcherByWordInTitle();
+        //ItemSearcherByWordInTitle viewer = new ItemSearcherByWordInTitle();
         try {
             // InputStreamの用意
             //URL url = new URL("https://itunes.apple.com/us/rss/topmusicvideos/limit=10/xml");
@@ -25,16 +26,54 @@ public class ItemSearcherByWordInTitle {
             connection.connect();
             InputStream inputStream = connection.getInputStream();
             // DOMツリーの構築
-            Document document = viewer.buildDocument(inputStream, "utf-8");
-            viewer.showTree(document.getDocumentElement());
+            //Document document = viewer.buildDocument(inputStream, "utf-8");
+            //viewer.showTree(document.getDocumentElement());
+
+            //下からコピー
+            // DOM実装(implementation)の用意 (Load and Save用)
+            DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
+            DOMImplementationLS implementation = (DOMImplementationLS) registry.getDOMImplementation("XML 1.0");
+            // 読み込み対象の用意
+            LSInput input = implementation.createLSInput();
+            input.setByteStream(inputStream);
+            input.setEncoding("UTF-8");
+            // 構文解析器(parser)の用意
+            LSParser parser = implementation.createLSParser(DOMImplementationLS.MODE_SYNCHRONOUS, null);
+            parser.getDomConfig().setParameter("namespaces", false);
+            // DOMの構築
+            Document document = parser.parse(input);
+            //ここまでコピー
+
+            //XPathの作成
+            XPathFactory factory = XPathFactory.newInstance();
+            XPath xPath = factory.newXPath();
+
+            NodeList itemNodeList = (NodeList) xPath.evaluate("/rss/channel/item",
+                    document, XPathConstants.NODESET); // RSS 2.0
+
+            String target = "成功";
+
+
+            for (int i = 0; i < itemNodeList.getLength(); i++) {
+                //System.out.println("hello?");//ここまで来てるのか確認
+                Node itemNode = itemNodeList.item(i);
+                String title = (String) xPath.evaluate("./title/text()", itemNode, XPathConstants.STRING);
+                if (title.contains(target)) {
+                    System.out.println("タイトルは" + title);
+                    System.out.println("リンクは" + xPath.evaluate("./link/text()", itemNode, XPathConstants.STRING));
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
     }
 
     /**
      * DOM Tree の構築
      */
+
     public Document buildDocument(InputStream inputStream, String encoding) {
         Document document = null;
         try {
@@ -50,6 +89,7 @@ public class ItemSearcherByWordInTitle {
             parser.getDomConfig().setParameter("namespaces", false);
             // DOMの構築
             document = parser.parse(input);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -63,59 +103,6 @@ public class ItemSearcherByWordInTitle {
         for (Node current = node.getFirstChild();
              current != null;
              current = current.getNextSibling()) {
-            String str = current.getNodeValue();
-            if (current.getNodeType() == Node.ELEMENT_NODE && current.getNodeName().equals("item")) {
-                //System.out.println(current.getNodeName() + " {");
-                showItem(current); //もしノードが要素で更にノードネームがitemならshowItemに移行
-                //System.out.println("}");
-            } else if (current.getNodeType() == Node.ELEMENT_NODE) { // ノードは要素?
-                String nodeName = current.getNodeName();
-                // 中括弧 { } を使って階層を表現
-                showTree(current); // さらに子ノードを見る (再帰)
-
-            }
-        }
-    }
-
-    public void showItem(Node node) {
-
-        for (Node current = node.getFirstChild();
-             current != null;
-             current = current.getNextSibling()) {
-            String str = current.getNodeValue();
-
-            if (current.getNodeType() == Node.ELEMENT_NODE) { // ノードは要素?
-                String nodeName = current.getNodeName();
-                // 中括弧 { } を使って階層を表現
-                showItem(current); // さらに子ノードを見る (再帰)
-
-            } else if (current.getNodeType() == Node.TEXT_NODE // ノードはテキスト?
-                    && current.getNodeValue().trim().length() != 0) {
-                //判定する文字列
-                String temp = current.getNodeValue();
-                Pattern p = Pattern.compile("[成功]");
-                Matcher m = p.matcher(temp);
-                if (m.find()) {
-                    System.out.println("HELLO?");
-                    //System.out.println(current.getNodeName() + " {");
-                    showTU(current); //もしタイトルが指定されていたものと一致していたらshowTUに移行
-                    System.out.println(current.getNodeValue());
-                    //System.out.println("}");
-                }
-                //System.out.println(current.getNodeValue());
-            }
-        }
-    }
-
-    public void showTU(Node node) {
-
-        for (Node current = node.getFirstChild();
-             current != null;
-             current = current.getNextSibling()) {
-            System.out.println(current.getNodeValue());
-
-
-            String str = current.getNodeValue();
             if (current.getNodeType() == Node.ELEMENT_NODE) { // ノードは要素?
                 String nodeName = current.getNodeName();
                 // 中括弧 { } を使って階層を表現
@@ -132,92 +119,3 @@ public class ItemSearcherByWordInTitle {
         }
     }
 }
-/*
-public void showTree(Node node) {
-        for (Node current = node.getFirstChild();
-             current != null;
-             current = current.getNextSibling()) {
-            String str = current.getNodeValue();
-            if (current.getNodeType() == Node.ELEMENT_NODE) { // ノードは要素?
-                String nodeName = current.getNodeName();
-                // 中括弧 { } を使って階層を表現
-                System.out.println(nodeName + " {");
-                showTree(current); // さらに子ノードを見る (再帰)
-                System.out.println("}");
-            }
-
-            else if (current.getNodeType() == Node.TEXT_NODE // ノードはテキスト?
-                    && current.getNodeValue().trim().length() != 0) {
-                System.out.println(current.getNodeValue());
-            } else if (current.getNodeType() == Node.CDATA_SECTION_NODE) { // ノードはCDATA?
-                System.out.println(current.getNodeValue());
-            } // HTMLタグなどを含む
-            ; // 上記以外のノードでは何もしない
-        }
-    }
- */
-/*
-public void showTree(Node node) {
-        for (Node current = node.getFirstChild();
-             current != null;
-             current = current.getNextSibling()) {
-            String str;
-            if (current.getNodeType() == Node.ELEMENT_NODE) { // ノードは要素?
-                String nodeName = current.getNodeName();
-                // 中括弧 { } を使って階層を表現
-                System.out.println(nodeName + " {");
-                str = current.getNodeValue();
-                if (nodeName.equals("title")) {
-                    //タイトルタグ限定
-                    if (str.equals("虚構新聞")) {
-                        if (current.getNodeType() == Node.TEXT_NODE // ノードはテキスト?
-                                && current.getNodeValue().trim().length() != 0) {
-                            System.out.println(current.getNodeValue());
-                        } else if (current.getNodeType() == Node.CDATA_SECTION_NODE) { // ノードはCDATA?
-                            System.out.println(current.getNodeValue());
-                        }
-                    }
-                }
-                showTree(current); // さらに子ノードを見る (再帰)
-                System.out.println("}");
-            }  // HTMLタグなどを含む
-            ; // 上記以外のノードでは何もしない
-        }
-    }
- */
-
-/*
-public void showTree(Node node) {
-        for (Node current = node.getFirstChild();
-             current != null;
-             current = Objects.requireNonNull(current).getNextSibling()) {
-            String str = current.getNodeValue();
-            if (current.getNodeType() == Node.ELEMENT_NODE) { // ノードは要素?
-                String nodeName = current.getNodeName();
-                if (nodeName.equals("item")) {
-                    //この下の階層にはタイトルとリンクが有ることが確定
-
-                    for (Node tmpcurrent = current.getNextSibling();
-                         current != null;
-                         current = current.getNextSibling()) {
-                        if (tmpcurrent.getNodeName().equals("虚構新聞")) {
-                            System.out.println(current.getNodeValue());
-                        }
-                    }
-                }
-                // 中括弧 { } を使って階層を表現
-                System.out.println(nodeName + " {");
-                showTree(current); // さらに子ノードを見る (再帰)
-                System.out.println("}");
-            }
-            else if (current.getNodeType() == Node.TEXT_NODE // ノードはテキスト?
-                    && current.getNodeValue().trim().length() != 0) {
-                System.out.println(current.getNodeValue());
-            } else if (current.getNodeType() == Node.CDATA_SECTION_NODE) { // ノードはCDATA?
-                System.out.println(current.getNodeValue());
-            }
-// HTMLタグなどを含む
-; // 上記以外のノードでは何もしない
-        }
-                }
- */
