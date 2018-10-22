@@ -62,15 +62,15 @@ public class ItemSearcherByWordInTitle {
              current != null;
              current = current.getNextSibling()) {
             String str = current.getNodeValue();
-            if (current.getNodeType() == Node.ELEMENT_NODE) { // ノードは要素?
+            if (current.getNodeType() == Node.ELEMENT_NODE && current.getNodeName().equals("item")) {
+                System.out.println(current.getNodeName() + " {");
+                showItem(current); //もしノードが要素で更にノードネームがitemならshowItemに移行
+                System.out.println("}");
+            } else if (current.getNodeType() == Node.ELEMENT_NODE) { // ノードは要素?
                 String nodeName = current.getNodeName();
                 // 中括弧 { } を使って階層を表現
                 showTree(current); // さらに子ノードを見る (再帰)
 
-            } else if (current.getNodeType() == Node.ELEMENT_NODE && current.getNodeName().equals("item")) {
-                System.out.println(current.getNodeName() + " {");
-                showItem(current); //もしノードが要素で更にノードネームがitemならshowItemに移行
-                System.out.println("}");
             } else if (current.getNodeType() == Node.TEXT_NODE // ノードはテキスト?
                     && current.getNodeValue().trim().length() != 0) {
                 System.out.println(current.getNodeValue());
@@ -86,17 +86,19 @@ public class ItemSearcherByWordInTitle {
              current != null;
              current = current.getNextSibling()) {
             String str = current.getNodeValue();
+
             if (current.getNodeType() == Node.ELEMENT_NODE) { // ノードは要素?
                 String nodeName = current.getNodeName();
                 // 中括弧 { } を使って階層を表現
                 showItem(current); // さらに子ノードを見る (再帰)
 
-            } else if (current.getNodeType() == Node.ELEMENT_NODE && current.getNodeValue().equals("虚構新聞")) {
-                System.out.println(current.getNodeName() + " {");
-                showTU(current); //もしノードが要素で更にタイトルが指定されていたものと一致していたらshowTUに移行
-                System.out.println("}");
             } else if (current.getNodeType() == Node.TEXT_NODE // ノードはテキスト?
                     && current.getNodeValue().trim().length() != 0) {
+                if (current.getNodeValue().equals("虚構新聞")) {
+                    System.out.println(current.getNodeName() + " {");
+                    showTU(current); //もしタイトルが指定されていたものと一致していたらshowTUに移行
+                    System.out.println("}");
+                }
                 System.out.println(current.getNodeValue());
             } else if (current.getNodeType() == Node.CDATA_SECTION_NODE) { // ノードはCDATA?
                 System.out.println(current.getNodeValue());
@@ -106,16 +108,21 @@ public class ItemSearcherByWordInTitle {
     }
 
     public void showTU(Node node) {
+        System.out.println("HELLO??");
         for (Node current = node.getFirstChild();
              current != null;
              current = current.getNextSibling()) {
             String str = current.getNodeValue();
-            if (current.getNodeType() == Node.ELEMENT_NODE) { // ノードは要素?
+            if (current.getNodeType() == Node.ELEMENT_NODE && (current.getNodeValue().equals("title") || current.getNodeValue().equals("link"))) { // ノードが要素で更にノードの名前がtitleかlinkなら
                 String nodeName = current.getNodeName();
                 // 中括弧 { } を使って階層を表現
                 System.out.println(nodeName + " {");
                 showTU(current); // さらに子ノードを見る (再帰)
                 System.out.println("}");
+            } else if (current.getNodeType() == Node.ELEMENT_NODE) { // ノードは要素?
+                String nodeName = current.getNodeName();
+                // 中括弧 { } を使って階層を表現
+                showTU(current); // さらに子ノードを見る (再帰)
             } else if (current.getNodeType() == Node.TEXT_NODE // ノードはテキスト?
                     && current.getNodeValue().trim().length() != 0) {
                 System.out.println(current.getNodeValue());
