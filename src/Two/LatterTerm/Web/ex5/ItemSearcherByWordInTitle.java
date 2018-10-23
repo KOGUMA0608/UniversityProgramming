@@ -8,10 +8,12 @@ import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSInput;
 import org.w3c.dom.ls.LSParser;
 
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import javax.xml.xpath.*;
 
 public class ItemSearcherByWordInTitle {
 
@@ -66,8 +68,6 @@ public class ItemSearcherByWordInTitle {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     /**
