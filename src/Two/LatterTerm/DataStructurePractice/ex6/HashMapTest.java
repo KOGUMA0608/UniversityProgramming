@@ -6,7 +6,6 @@ import java.util.Map;
 public class HashMapTest {
     public static void main(String[] args) {
         Map<String, String> map = new HashMap<>();
-
         map.put("tomato", "トマト");
         map.put("strawberry", "苺");
         map.put("orange", "蜜柑");

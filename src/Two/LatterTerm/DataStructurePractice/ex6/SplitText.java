@@ -5,8 +5,6 @@ import java.util.Scanner;
 
 public class SplitText {
     public static void main(String[] args) {
-
-
         StringBuilder plus = new StringBuilder();
         String input = null;
         Scanner scanner;
@@ -16,6 +14,7 @@ public class SplitText {
             BufferedReader reader = new BufferedReader(tmp);
             while (reader.ready()) {
                 plus.append(reader.readLine());//reader.readLine()
+                plus.append("\n");
             }
             input = new String(plus);
             reader.close();
@@ -24,6 +23,7 @@ public class SplitText {
         }
         assert input != null;
         scanner = new Scanner(input);
+        //scanner.useDelimiter("¥n");
         while (scanner.hasNext()) {
             System.out.println(scanner.next());
         }
