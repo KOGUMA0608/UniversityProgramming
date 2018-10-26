@@ -17,7 +17,6 @@ public class MyQueue {
             while (true) {
                 if (tmp.getNext() == null) {
                     tmp.setNext(new Node(str));
-                    head.setNext(tmp);
                     return;
                 } else {
                     tmp = tmp.getNext();
@@ -43,7 +42,7 @@ public class MyQueue {
     public void print() {
         // ノードを先頭から最後までたどってデータを表示
         System.out.print("キューの中身: ");
-        print(head);
+        System.out.println(head);//print(head);にすると最初のnullが消える？
     }
 
     public void print(Node p) {
