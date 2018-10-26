@@ -28,31 +28,41 @@ public class MyQueue {
     public String peek() {
         // 先頭のノードを参照して，データを返す
         // ここを作る
-
+        if (head == null) {
+            return "null";
+        }
         return head.toString();
     }
 
     public String poll() {
         // 先頭のノードを取り出して削除し，データを返す
         // ここを作る
-
-        return "テスト";
+        if (head == null) {
+            return "null";
+        }
+        String tmp = head.toString();
+        head = head.getNext();
+        return tmp;
     }
 
     public void print() {
         // ノードを先頭から最後までたどってデータを表示
         System.out.print("キューの中身: ");
-        System.out.println(head);//print(head);にすると最初のnullが消える？
+        print(head);//print(head);にすると最初のnullが消える？
+        System.out.print("\n");
     }
 
     public void print(Node p) {
         // 再帰呼び出しでノードをたどってデータを表示
         // ここを作る
-        while (p != null) {
-            System.out.print(p + " -> ");
-            p = p.getNext();
+        if (head == null) {
+            System.out.print("null");
+        } else {
+            while (p != null) {
+                System.out.print(p + " -> ");
+                p = p.getNext();
+            }
         }
-
     }
 
     public static void main(String[] args) {
