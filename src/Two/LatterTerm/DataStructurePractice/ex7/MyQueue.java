@@ -4,6 +4,7 @@ public class MyQueue {
     private Node head;      // 先頭のノードを入れるフィールド
 
     public MyQueue() {
+
         head = null;    // 最初は空っぽ
     }
 
