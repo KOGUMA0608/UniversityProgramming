@@ -18,6 +18,18 @@ public class BreadthFirstSearch {
         public void addChild(Node child) {
             children.add(child);
         }
+        Node ChildisVisited() {
+            for (int i = 0; i < children.size(); i++) {
+                Node output = children.get(i);
+                if (!output.isVisited) {
+                    return output;
+                }
+            }
+            return null;
+        }
+        public String toString(){
+            return String.valueOf(label);
+        }
     }
 
     Node root;
@@ -54,6 +66,17 @@ public class BreadthFirstSearch {
             // ここを作る
             // 幅優先探索になるようにノードを巡る
             // queueをうまく活用すること
+
+            Node seek = bfs.queue.peek();
+            Node output = seek.ChildisVisited();
+            if (output == null) {
+                bfs.queue.poll();
+                System.out.println("この下は存在しない!");
+                continue;
+            }
+            output.isVisited = true;
+            bfs.queue.add(output);
+            System.out.println(output);
         }
     }
 }
