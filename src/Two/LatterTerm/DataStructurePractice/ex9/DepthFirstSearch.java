@@ -49,15 +49,51 @@ public class DepthFirstSearch {
         node.isVisited = true;
         dfs.stack.push(node);
         System.out.println(node.label);
+        boolean isFlag = false;
 
-        boolean isFlag;
         while (!dfs.stack.isEmpty()) {
             // ここを作る
             // 深さ優先探索になるようにノードを巡る
             // stackをうまく活用すること
-            if (node.children != null) {
-            }
+            //Node seek = node;
 
+
+            int point = 0;
+            if (!isFlag) {
+                try {
+                    node = node.children.get(point);
+                    point = 0;
+                    node.isVisited = true;
+                    dfs.stack.push(node);
+                    System.out.println(node.label);
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("底まで到達した!");
+                    isFlag = true;
+
+                }
+            } else {
+                node = dfs.stack.pop();
+                try {
+                    if (point < node.children.size()) {
+                        point++;
+                    }
+                    if (node.children.get(point) != null) {
+                        isFlag = false;
+                    }
+
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("このノードにはこれ以上探索できる場所がない、現在の位置は" + node.label);
+                }
+            }
         }
     }
 }
+/*
+for (int i = 0; i < node.children.size(); i++) {
+
+                node = node.children.get(0);
+                node.isVisited = true;
+                dfs.stack.push(node);
+                System.out.println(node.label);
+            }
+ */

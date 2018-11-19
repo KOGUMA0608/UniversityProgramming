@@ -72,7 +72,7 @@ public class Dijkstra {
             // ここを作る
             // ダイクストラ法のアルゴリズムを実装する
             // 全てのノードを確定ラベルにする
-        } while (true);
+        } while (false);//true
 
         for (Node node : graph.nodes) {
             System.out.println("Node" + node.key + ": " + node.label);
