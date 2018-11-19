@@ -31,11 +31,13 @@ public class DepthFirstSearch {
         Node node5 = new Node(5);
         Node node6 = new Node(6);
         Node node7 = new Node(7);
+        Node node99 = new Node(99);
 
         node1.addChild(node2);
         node1.addChild(node3);
         node1.addChild(node4);
         node2.addChild(node5);
+        node2.addChild(node99);
         node3.addChild(node6);
         node3.addChild(node7);
 
@@ -56,8 +58,6 @@ public class DepthFirstSearch {
             // 深さ優先探索になるようにノードを巡る
             // stackをうまく活用すること
             //Node seek = node;
-
-
             int point = 0;
             if (!isFlag) {
                 try {
@@ -69,7 +69,6 @@ public class DepthFirstSearch {
                 } catch (IndexOutOfBoundsException e) {
                     System.out.println("底まで到達した!");
                     isFlag = true;
-
                 }
             } else {
                 node = dfs.stack.pop();
@@ -80,7 +79,6 @@ public class DepthFirstSearch {
                     if (node.children.get(point) != null) {
                         isFlag = false;
                     }
-
                 } catch (IndexOutOfBoundsException e) {
                     System.out.println("このノードにはこれ以上探索できる場所がない、現在の位置は" + node.label);
                 }
