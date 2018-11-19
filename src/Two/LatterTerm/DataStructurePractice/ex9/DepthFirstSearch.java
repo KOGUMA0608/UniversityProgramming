@@ -18,6 +18,19 @@ public class DepthFirstSearch {
         public void addChild(Node child) {
             children.add(child);
         }
+
+        Node ChildisVisited() {
+            for (int i = 0; i < children.size(); i++) {
+                Node output = children.get(i);
+                if (!output.isVisited) {
+                    return output;
+                }
+            }
+            return null;
+        }
+        public String toString(){
+            return String.valueOf(label);
+        }
     }
 
     Node root;
@@ -31,13 +44,11 @@ public class DepthFirstSearch {
         Node node5 = new Node(5);
         Node node6 = new Node(6);
         Node node7 = new Node(7);
-        Node node99 = new Node(99);
 
         node1.addChild(node2);
         node1.addChild(node3);
         node1.addChild(node4);
         node2.addChild(node5);
-        node2.addChild(node99);
         node3.addChild(node6);
         node3.addChild(node7);
 
@@ -51,14 +62,38 @@ public class DepthFirstSearch {
         node.isVisited = true;
         dfs.stack.push(node);
         System.out.println(node.label);
-        boolean isFlag = false;
+        //boolean isFlag = false;
 
         while (!dfs.stack.isEmpty()) {
             // ここを作る
             // 深さ優先探索になるようにノードを巡る
             // stackをうまく活用すること
             //Node seek = node;
-            int point = 0;
+
+            Node seek = dfs.stack.peek();
+            Node output = seek.ChildisVisited();
+            if (output == null) {
+                dfs.stack.pop();
+                System.out.println("この下は存在しない!");
+                continue;
+            }
+            output.isVisited = true;
+            dfs.stack.push(output);
+            System.out.println(output);
+        }
+    }
+}
+/*
+for (int i = 0; i < node.children.size(); i++) {
+
+                node = node.children.get(0);
+                node.isVisited = true;
+                dfs.stack.push(node);
+                System.out.println(node.label);
+            }
+ */
+/*
+int point = 0;
             if (!isFlag) {
                 try {
                     node = node.children.get(point);
@@ -82,16 +117,5 @@ public class DepthFirstSearch {
                 } catch (IndexOutOfBoundsException e) {
                     System.out.println("このノードにはこれ以上探索できる場所がない、現在の位置は" + node.label);
                 }
-            }
-        }
-    }
-}
-/*
-for (int i = 0; i < node.children.size(); i++) {
-
-                node = node.children.get(0);
-                node.isVisited = true;
-                dfs.stack.push(node);
-                System.out.println(node.label);
             }
  */
