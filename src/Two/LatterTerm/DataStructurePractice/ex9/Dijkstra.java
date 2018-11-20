@@ -8,17 +8,23 @@ public class Dijkstra {
     private class Node {
         int key;
         int label;
-        boolean isFixed;
+        boolean lock;
         ArrayList<Edge> edges = new ArrayList<Edge>();
 
         public Node(int key) {
             this.key = key;
             this.label = INFINITY;
-            this.isFixed = false;
+            this.lock = false;
         }
 
         public void addEdge(Edge edge) {
             edges.add(edge);
+        }
+
+        public void Comparison(int comp) {
+            if (this.label > comp) {
+                this.label = comp;
+            }
         }
     }
 
@@ -31,6 +37,7 @@ public class Dijkstra {
             this.weight = weight;
         }
     }
+
 
     Node start;
     ArrayList<Node> nodes = new ArrayList<Node>();
@@ -68,14 +75,48 @@ public class Dijkstra {
 
     public static void main(String[] args) {
         Dijkstra graph = new Dijkstra();
+        Node seek = graph.start;
         do {
             // ここを作る
             // ダイクストラ法のアルゴリズムを実装する
             // 全てのノードを確定ラベルにする
-        } while (false);//true
+            for (Edge edge : seek.edges) {
+                if (edge.to.label > seek.label + edge.weight) {
+                    edge.to.label = seek.label + edge.weight;
+                }
+            }
+            Node minNode = null;
+            for (Node node : graph.nodes) {
+                if (node.lock) {
+                    continue;
+                }
+                if (minNode == null) {
+                    minNode = node;
+                } else {
+                    if (minNode.label > node.label) {
+                        minNode = node;
+                    }
+                }
+            }
+            if (minNode == null) {
+                break;
+            }
+            minNode.lock = true;
+            seek = minNode;
+        } while (true);//true
 
         for (Node node : graph.nodes) {
             System.out.println("Node" + node.key + ": " + node.label);
         }
     }
 }
+/*
+graph.start.lock = true;
+            for (Edge edge : graph.start.edges) {
+                edge.to.Comparison(graph.start.label + edge.weight);
+            }
+            Node minNode=null;
+            for(Node :graph.start.edges){
+
+            }
+ */
