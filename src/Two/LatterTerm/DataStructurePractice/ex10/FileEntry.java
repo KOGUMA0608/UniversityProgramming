@@ -5,27 +5,37 @@ import java.util.*;
 public class FileEntry {
     private String name;
     private ArrayList<FileEntry> list;
+
     public FileEntry(String name) {
         this.name = name;
         list = new ArrayList<FileEntry>();
     }
+
     public String getName() {
         return name;
     }
+
     public FileEntry add(FileEntry entry) {
         list.add(entry);
         return this;
     }
+
     public void printList() {
         printList("");
     }
+
     public void printList(String prefix) {
         // ここを作る
-
+        System.out.println(prefix + "/" + this);
+        for (FileEntry file : list) {
+            file.printList(prefix + "/" + this);
+        }
     }
+
     public String toString() {
         return name;
     }
+
     public static void main(String[] args) {
         FileEntry rootdir = new FileEntry("root");
         FileEntry bindir = new FileEntry("bin");
