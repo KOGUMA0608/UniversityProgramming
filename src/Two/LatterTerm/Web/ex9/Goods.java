@@ -1,4 +1,4 @@
-package Two.LatterTerm.Web.ex8;
+package Two.LatterTerm.Web.ex9;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -25,9 +25,16 @@ public class Goods {
     String description;
     String link;
     ArrayList text = new ArrayList();
-    String html;
 
     ArrayList<Goods> itemList = new ArrayList<Goods>();
+
+    Goods(String name, int price, String description, String link) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.link = link;
+    }
+
     Goods(String name, String link) {
         this.name = name;
         this.link = link;
@@ -74,7 +81,6 @@ public class Goods {
             connection.connect();
             InputStream inputStream = connection.getInputStream();
             //URLをインプットする(ここまで)
-            html=getHTML(url);
 
             // DOM実装(implementation)の用意 (Load and Save用)
             DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
@@ -131,25 +137,6 @@ public class Goods {
             //    System.out.println(filename + "が見つかりません。");
         } catch (IOException e) {
             System.out.println(e);
-        }
-    }
-
-    static String getHTML(URL url) {
-        System.out.println("??");
-        try {
-            URLConnection connection = url.openConnection();
-            connection.connect();
-            InputStream inputStream = connection.getInputStream();
-            StringBuilder sb = new StringBuilder();
-            String b;
-            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            while ((b = br.readLine()) != null) {
-                sb.append(b);
-            }
-            return sb.toString();
-        } catch (IOException e) {
-            System.err.println("エラー:" + e.toString());
-            return "";
         }
     }
 }

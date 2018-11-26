@@ -75,11 +75,10 @@ public class ItemSearcherUsingLinkedPages {
             //リンク先情報を取り出し
             for (Goods item : goods.itemList) {
                 Pattern pattern = Pattern.compile(searchWord);
-                for (int i = 0; i < item.text.size(); i++) {
-                    Matcher matcher = pattern.matcher((String) item.text.get(i));
-                    if (matcher.find()) {
-                        System.out.println((String) item.text.get(i));
-                    }
+                Matcher matcher = pattern.matcher(item.html);
+                System.out.println("!!");
+                if (matcher.find()) {
+                    System.out.println(item.html);
                 }
             }
         }
@@ -94,6 +93,20 @@ public class ItemSearcherUsingLinkedPages {
                     System.out.println("リンク:" + item.link);
                     System.out.println("説明文:" + item.description);
                     System.out.println("金額:" + item.price);
+                }
+            }
+        }
+         */
+        /*
+        for (Goods goods : Goodslist) {
+            //リンク先情報を取り出し
+            for (Goods item : goods.itemList) {
+                Pattern pattern = Pattern.compile(searchWord);
+                for (int i = 0; i < item.text.size(); i++) {
+                    Matcher matcher = pattern.matcher((String) item.text.get(i));
+                    if (matcher.find()) {
+                        System.out.println((String) item.text.get(i));
+                    }
                 }
             }
         }
