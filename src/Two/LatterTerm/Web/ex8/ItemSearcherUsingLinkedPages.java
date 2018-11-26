@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,9 +24,13 @@ public class ItemSearcherUsingLinkedPages {
     public static void main(String[] args) {
         //ItemSearcherByWordInTitle viewer = new ItemSearcherByWordInTitle();
         ArrayList<Goods> Goodslist = new ArrayList<Goods>();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("型番を入力してください");
+        String searchWord = scanner.nextLine();
+        scanner.close();
         try {
             // URLをInputする
-            URL url = new URL("https://shopping.yahoo.co.jp/rss?p=%E6%A3%9A&tab_ex=commerce&oq=&pf=&pt=&ei=UTF-8");
+            URL url = new URL("http://www.tsukumo.co.jp/feeds/specials.xml");
             URL search;
             URLConnection connection = url.openConnection();
             connection.connect();
@@ -51,10 +56,53 @@ public class ItemSearcherUsingLinkedPages {
 
             NodeList itemNodeList = (NodeList) xPath.evaluate("/rss/channel/item",
                     document, XPathConstants.NODESET); // RSS 2.0
-
-            int target = 65;
-
             for (int i = 0; i < itemNodeList.getLength(); i++) {
+                //まず、Goodslistに全てのリンク先情報を入れる
+                String name;
+                int price = 0;
+                String idescription;
+                String link;
+                Node itemNode = itemNodeList.item(i);
+                //タイトルとリンクをGoodslistに追加
+                Goodslist.add(new Goods((String) xPath.evaluate("./title/text()", itemNode, XPathConstants.STRING), (String) xPath.evaluate("./link/text()", itemNode, XPathConstants.STRING)));
+                //Goodslist.add(new Goods((String) xPath.evaluate("./title/text()", itemNode, XPathConstants.STRING), Integer.parseInt(comp2), description, (String) xPath.evaluate("./link/text()", itemNode, XPathConstants.STRING)));
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        for (Goods goods : Goodslist) {
+            //リンク先情報を取り出し
+            for (ArrayList text : goods.text) {
+                Pattern pattern = Pattern.compile(searchWord);
+                Matcher matcher = pattern.matcher(item.description);
+                if (matcher.find()) {
+                    System.out.println("タイトル:" + item.name);
+                    System.out.println("リンク:" + item.link);
+                    System.out.println("説明文:" + item.description);
+                    System.out.println("金額:" + item.price);
+                }
+            }
+        }
+        /*
+        for (Goods goods : Goodslist) {
+            //リンク先情報を取り出し
+            for (Goods item : goods.itemList) {
+                Pattern pattern = Pattern.compile(searchWord);
+                Matcher matcher = pattern.matcher(item.description);
+                if (matcher.find()) {
+                    System.out.println("タイトル:" + item.name);
+                    System.out.println("リンク:" + item.link);
+                    System.out.println("説明文:" + item.description);
+                    System.out.println("金額:" + item.price);
+                }
+            }
+        }
+         */
+    }
+
+    /*
+    for (int i = 0; i < itemNodeList.getLength(); i++) {
                 String name;
                 int price = 0;
                 String idescription;
@@ -82,8 +130,5 @@ public class ItemSearcherUsingLinkedPages {
                 //description.contains(target)
                 Goodslist.add(new Goods((String) xPath.evaluate("./title/text()", itemNode, XPathConstants.STRING), Integer.parseInt(comp2), description, (String) xPath.evaluate("./link/text()", itemNode, XPathConstants.STRING)));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+     */
 }

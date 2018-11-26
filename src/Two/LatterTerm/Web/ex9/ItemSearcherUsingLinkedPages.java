@@ -17,10 +17,11 @@ public class ItemSearcherUsingLinkedPages {
         ArrayList input = new ArrayList();
         Scanner scanner = new Scanner(System.in);
         System.out.println("型番を入力してください");
-        //String filename = args[0];
+        String search=scanner.nextLine();
+        scanner.close();
         try {
             // URLオブジェクトを生成
-            URL url = new URL(args[0]);
+            URL url = new URL("http://www.tsukumo.co.jp/feeds/specials.xml");
             // URLオブジェクトから、接続にいくURLConnectionオブジェクトを取得
             URLConnection connection = url.openConnection();
             // 接続
@@ -37,8 +38,6 @@ public class ItemSearcherUsingLinkedPages {
                 input.add(line);
             }
             reader.close();
-            //} catch (FileNotFoundException e) {
-            //    System.out.println(filename + "が見つかりません。");
         } catch (IOException e) {
             System.out.println(e);
         }
