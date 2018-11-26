@@ -1,15 +1,5 @@
 package Two.LatterTerm.Web.ex9;
 
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.util.Scanner;
-
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -17,6 +7,15 @@ import org.w3c.dom.bootstrap.DOMImplementationRegistry;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSInput;
 import org.w3c.dom.ls.LSParser;
+
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.util.Scanner;
 
 public class YahooShoppingSearcherUsingLinkedPages {
     public static void main(String[] args) {
@@ -26,7 +25,7 @@ public class YahooShoppingSearcherUsingLinkedPages {
         System.out.print("検索語を入力: ");
         String query = scanner.nextLine();
         // リンク先の商品ページから探す語の入力
-        System.out.print("型番を入力してください: ");
+        System.out.print("商品コードを入力してください: ");
         String word = scanner.nextLine();
         scanner.close();
         try {
