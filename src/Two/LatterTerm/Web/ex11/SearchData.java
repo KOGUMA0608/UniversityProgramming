@@ -22,11 +22,12 @@ import java.util.List;
 
 public class SearchData {
     public static void main(String[] args) {
-        List<Item> itemList = new ArrayList<Item>();
+        List<Item> steamItemList = new ArrayList<Item>();
         try {
+            //steam用
             Document steam = ConvertURLToXML(new URL("https://store.steampowered.com/feeds/weeklytopsellers.xml"));
             //Document steam = ConvertURLToXML(new URL("https://www.kuroneko-square.net/services/amazon/rest?api=ItemSearch&Keywords=https%3A%2F%2Fwww.amazon.co.jp%2Fgp%2Frss%2Fbestsellers%2Fsoftware%2F689132%2Fref%3Dzg_bs_689132_rsslink&SearchIndex=All&MinimumPrice=&MaximumPrice=&format=rdf"));
-            Document amazon = ConvertURLToXML(new URL("https://www.amazon.co.jp/gp/rss/bestsellers/software/689132/ref=zg_bs_689132_rsslink"));
+            //Document steam = ConvertURLToXML(new URL("https://www.amazon.co.jp/gp/rss/bestsellers/software/689132/ref=zg_bs_689132_rsslink.xml"));
             XPath xPath = XPathFactory.newInstance().newXPath();
             NodeList itemNodeList = (NodeList) xPath.evaluate("//item", steam, XPathConstants.NODESET);
             for (int i = 0; i < itemNodeList.getLength(); i++) {
@@ -34,14 +35,32 @@ public class SearchData {
                 String title = (String) xPath.evaluate("title/text()", node, XPathConstants.STRING);
                 String description = (String) xPath.evaluate("description/text()", node, XPathConstants.STRING);
                 String link = (String) xPath.evaluate("link/text()", node, XPathConstants.STRING);
-                itemList.add(new Item(title, description, link));
+                steamItemList.add(new Item(title, description, link));
             }
         } catch (MalformedURLException | XPathExpressionException event) {
             //XPathExpressionException event
             event.printStackTrace();
         }
 
-        for (Item item : itemList) {
+        List<Item> amazonItemList = new ArrayList<Item>();
+        try {
+            //amazon用
+            Document amazon = ConvertURLToXML(new URL("https://www.amazon.co.jp/gp/rss/bestsellers/software/689132/ref=zg_bs_689132_rsslink.xml"));
+            XPath xPath = XPathFactory.newInstance().newXPath();
+            NodeList itemNodeList = (NodeList) xPath.evaluate("//item", amazon, XPathConstants.NODESET);
+            for (int i = 0; i < itemNodeList.getLength(); i++) {
+                Node node = itemNodeList.item(i);
+                String title = (String) xPath.evaluate("title/text()", node, XPathConstants.STRING);
+                String description = (String) xPath.evaluate("description/text()", node, XPathConstants.STRING);
+                String link = (String) xPath.evaluate("link/text()", node, XPathConstants.STRING);
+                amazonItemList.add(new Item(title, description, link));
+            }
+        } catch (MalformedURLException | XPathExpressionException event) {
+            //XPathExpressionException event
+            event.printStackTrace();
+        }
+
+        for (Item item : steamItemList) {
             System.out.println(item.title);
         }
     }
@@ -51,13 +70,13 @@ public class SearchData {
             URLConnection urlConnection = url.openConnection();
             urlConnection.connect();
             InputStream inputStream = urlConnection.getInputStream();
-
+            //inputStream.skip(1);
             DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
             DOMImplementationLS implementation = (DOMImplementationLS) registry.getDOMImplementation("XML 1.0");
             // 読み込み対象の用意
             LSInput input = implementation.createLSInput();
             input.setByteStream(inputStream);
-            input.setEncoding("UTF-8");
+            input.setEncoding("UTF-32");
             // 構文解析器(parser)の用意
             LSParser parser = implementation.createLSParser(DOMImplementationLS.MODE_SYNCHRONOUS, null);
             parser.getDomConfig().setParameter("namespaces", false);
