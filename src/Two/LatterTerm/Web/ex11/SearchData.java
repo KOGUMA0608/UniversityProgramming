@@ -14,6 +14,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -43,9 +44,10 @@ public class SearchData {
         }
 
         List<Item> amazonItemList = new ArrayList<Item>();
+
         try {
             //amazon用
-            Document amazon = ConvertURLToXML(new URL("https://www.amazon.co.jp/gp/rss/bestsellers/software/689132/ref=zg_bs_689132_rsslink.xml"));
+            Document amazon = ConvertURLToXMLByBrowser(new URL("https://www.amazon.co.jp/gp/rss/bestsellers/software/689132/ref=zg_bs_689132_rsslink.xml"));
             XPath xPath = XPathFactory.newInstance().newXPath();
             NodeList itemNodeList = (NodeList) xPath.evaluate("//item", amazon, XPathConstants.NODESET);
             for (int i = 0; i < itemNodeList.getLength(); i++) {
@@ -62,6 +64,13 @@ public class SearchData {
 
         for (Item item : steamItemList) {
             System.out.println(item.title);
+            System.out.println(item.description);
+            System.out.println(item.link);
+        }
+        for (Item item : amazonItemList) {
+            System.out.println(item.title);
+            System.out.println(item.description);
+            System.out.println(item.link);
         }
     }
 
@@ -70,13 +79,38 @@ public class SearchData {
             URLConnection urlConnection = url.openConnection();
             urlConnection.connect();
             InputStream inputStream = urlConnection.getInputStream();
-            //inputStream.skip(1);
+            //inputStream.skip(0);
             DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
             DOMImplementationLS implementation = (DOMImplementationLS) registry.getDOMImplementation("XML 1.0");
             // 読み込み対象の用意
             LSInput input = implementation.createLSInput();
             input.setByteStream(inputStream);
-            input.setEncoding("UTF-32");
+            input.setEncoding("UTF-8");
+
+            // 構文解析器(parser)の用意
+            LSParser parser = implementation.createLSParser(DOMImplementationLS.MODE_SYNCHRONOUS, null);
+            parser.getDomConfig().setParameter("namespaces", false);
+            // DOMの構築
+            return parser.parse(input);
+        } catch (IOException | IllegalAccessException | InstantiationException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    static Document ConvertURLToXMLByBrowser(URL url) {
+        try {
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestProperty("User-Agent", "Mozila/5.0(Windows NT 6.1;WOW64)");
+            connection.connect();
+            InputStream inputStream = connection.getInputStream();
+            DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
+            DOMImplementationLS implementation = (DOMImplementationLS) registry.getDOMImplementation("XML 1.0");
+            // 読み込み対象の用意
+            LSInput input = implementation.createLSInput();
+            input.setByteStream(inputStream);
+            input.setEncoding("UTF-8");
+
             // 構文解析器(parser)の用意
             LSParser parser = implementation.createLSParser(DOMImplementationLS.MODE_SYNCHRONOUS, null);
             parser.getDomConfig().setParameter("namespaces", false);
