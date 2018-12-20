@@ -86,15 +86,19 @@ public class BinarySearchTree {
             return false;
         } else {
             BTNode comp = root;
-            if (comp.data.equals(key)) {
+            BTNode pre;
+            for (; ; ) {
                 //削除対象確認
                 if (comp.right == null && comp.left == null) {
                     //子無し
-                    comp = null;
                     return true;
                 } else if (comp.right != null && comp.left != null) {
                     //両方あり
-                    removeMin();
+
+                } else {
+                    //片方のみ
+                    if () {
+                    }
                 }
             }
         }
