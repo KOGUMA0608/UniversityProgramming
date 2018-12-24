@@ -1,5 +1,7 @@
 package Two.LatterTerm.DataStructurePractice.ex13;
 
+import java.util.ArrayList;
+
 public class BinarySearchTree01 {
 
     private class BTNode {
@@ -26,9 +28,15 @@ public class BinarySearchTree01 {
                 left.printNode(prefix + "\t");
             }
         }
+
+        @Override
+        public String toString() {
+            return String.valueOf(data);
+        }
     }
 
     private BTNode root;
+    ArrayList<BTNode> nodeList = new ArrayList();
 
     public BinarySearchTree01() {
         root = null;
@@ -266,7 +274,7 @@ public class BinarySearchTree01 {
         }
     }
 
-    private BTNode traverse(BTNode input) {
+    private void traverse(BTNode input) {
         /*
         考えるべきは4パターン
         1.そのノードに左右がある
@@ -275,17 +283,34 @@ public class BinarySearchTree01 {
         4.そのノードは両方無い
          */
 
+
         if (input == null) {
             System.out.println("値が存在しない");
-            return null;
+            return;
         }
         BTNode comp = input;
         for (; ; ) {
-            //1.左右がある
+            //1.左右がある:左,真ん中,右の順番で値を入力
             if (comp.left != null && comp.right != null) {
                 traverse(comp.left);
+                nodeList.add(comp);
+                traverse(comp.right);
+                return;
+            }
+            //2.そのノードに左しか無い:左,真ん中の順番で値を入力
+            if (comp.left != null && comp.right == null) {
+                traverse(comp.left);
+                nodeList.add(comp);
+                return;
+            }
+            //3.そのノードに右しか無い:真ん中,右の順番で値を入力
+            if (comp.left == null && comp.right != null) {
+                nodeList.add(comp);
                 traverse(comp.right);
             }
+            //4.そのノードは両方無い:真ん中を入力
+            nodeList.add(comp);
+            return;
         }
     }
 
@@ -372,6 +397,11 @@ public class BinarySearchTree01 {
         System.out.println("此処から先、実験的");
         System.out.println("最小値:" + bst.min().data);
         System.out.println("最大値:" + bst.max().data);
+
+        bst.traverse(bst.root);
+        for (BTNode node : bst.nodeList) {
+            System.out.print(node + "→");
+        }
     }
 }
 /*
