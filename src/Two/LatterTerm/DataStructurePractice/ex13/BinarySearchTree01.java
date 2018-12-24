@@ -38,7 +38,30 @@ public class BinarySearchTree01 {
         // keyで示されるノードを探索する
         // keyが見つかればそのノードを返し，
         // 見つからなければnullを返す
-        return null;
+        BTNode comp = root;
+        for (; ; ) {
+            //keyがcompより小さく、compには左が無い(ハズレ)
+            if (comp.data > key && comp.left == null) {
+                return null;
+            }
+            //keyがcompより小さく、compには左がある(探査続行)
+            if (comp.data > key) {
+                comp = comp.left;
+            }
+
+            //keyがcompより大きく、compには右が無い(ハズレ)
+            if (comp.data < key && comp.right == null) {
+                return null;
+            }
+            //keyがcompより大きく、compには右がある(探査続行)
+            if (comp.data < key) {
+                comp = comp.right;
+            }
+            //compとkeyと値が一致した
+            if (comp.data.equals(key)) {
+                return comp;
+            }
+        }
     }
 
     public BTNode add(Integer key) {
@@ -75,7 +98,6 @@ public class BinarySearchTree01 {
         }
         return null;
     }
-
 
     public boolean remove(Integer key) {
         //System.out.println("削除中");
@@ -216,6 +238,56 @@ public class BinarySearchTree01 {
         }
     }
 
+    private BTNode min() {
+        if (root == null) {
+            System.out.println("値が存在しない");
+            return null;
+        }
+        BTNode comp = root;
+        for (; ; ) {
+            if (comp.left == null) {
+                return comp;
+            }
+            comp = comp.left;
+        }
+    }
+
+    private BTNode max() {
+        if (root == null) {
+            System.out.println("値が存在しない");
+            return null;
+        }
+        BTNode comp = root;
+        for (; ; ) {
+            if (comp.right == null) {
+                return comp;
+            }
+            comp = comp.right;
+        }
+    }
+
+    private BTNode traverse(BTNode input) {
+        /*
+        考えるべきは4パターン
+        1.そのノードに左右がある
+        2.そのノードに左しか無い
+        3.そのノードに右しか無い
+        4.そのノードは両方無い
+         */
+
+        if (input == null) {
+            System.out.println("値が存在しない");
+            return null;
+        }
+        BTNode comp = input;
+        for (; ; ) {
+            //1.左右がある
+            if (comp.left != null && comp.right != null) {
+                traverse(comp.left);
+                traverse(comp.right);
+            }
+        }
+    }
 
     public void printNode() {
         root.printNode("");
@@ -296,6 +368,10 @@ public class BinarySearchTree01 {
             System.out.println("削除成功");
         }
         bst3.printNode();
+
+        System.out.println("此処から先、実験的");
+        System.out.println("最小値:" + bst.min().data);
+        System.out.println("最大値:" + bst.max().data);
     }
 }
 /*
