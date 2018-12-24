@@ -274,6 +274,10 @@ public class BinarySearchTree01 {
         }
     }
 
+    private void traverse() {
+        traverse(root);
+    }
+
     private void traverse(BTNode input) {
         /*
         考えるべきは4パターン
@@ -282,8 +286,6 @@ public class BinarySearchTree01 {
         3.そのノードに右しか無い
         4.そのノードは両方無い
          */
-
-
         if (input == null) {
             System.out.println("値が存在しない");
             return;
@@ -398,7 +400,7 @@ public class BinarySearchTree01 {
         System.out.println("最小値:" + bst.min().data);
         System.out.println("最大値:" + bst.max().data);
 
-        bst.traverse(bst.root);
+        bst.traverse();
         for (BTNode node : bst.nodeList) {
             System.out.print(node + "→");
         }
