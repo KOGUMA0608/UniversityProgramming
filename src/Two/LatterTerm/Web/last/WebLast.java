@@ -132,7 +132,7 @@ public class WebLast {
             //XPathExpressionException event
             event.printStackTrace();
         }
-
+/*全要素表示
         for (Item item : steamNewsItemList) {
             System.out.println(item.title);
             System.out.println(item.description);
@@ -163,6 +163,9 @@ public class WebLast {
             System.out.println(item.description);
             System.out.println(item.link);
         }
+        */
+//鍵括弧内(主にゲーム名)のみ抽出
+
     }
 
     static Document ConvertURLToXML(URL url) {
