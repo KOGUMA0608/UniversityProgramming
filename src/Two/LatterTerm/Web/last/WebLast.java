@@ -20,9 +20,14 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class WebLast {
     public static void main(String[] args) {
+        ArrayList<String> gameName = new ArrayList();
+        WebLast webLast = new WebLast();
+
         List<Item> steamNewsItemList = new ArrayList<Item>();
         try {
             //steam用
@@ -36,6 +41,7 @@ public class WebLast {
                 String link = (String) xPath.evaluate("link/text()", node, XPathConstants.STRING);
                 steamNewsItemList.add(new Item(title, description, link));
             }
+            webLast.extractGameName(steamNewsItemList, gameName);
         } catch (MalformedURLException | XPathExpressionException event) {
             //XPathExpressionException event
             event.printStackTrace();
@@ -56,6 +62,7 @@ public class WebLast {
                 String link = (String) xPath.evaluate("link/text()", node, XPathConstants.STRING);
                 steamTopSellingItemList.add(new Item(title, description, link));
             }
+            webLast.extractGameName(steamTopSellingItemList, gameName);
         } catch (MalformedURLException | XPathExpressionException event) {
             //XPathExpressionException event
             event.printStackTrace();
@@ -75,6 +82,7 @@ public class WebLast {
                 String link = (String) xPath.evaluate("link/text()", node, XPathConstants.STRING);
                 forgamerItemList.add(new Item(title, description, link));
             }
+            webLast.extractGameName(forgamerItemList, gameName);
         } catch (MalformedURLException | XPathExpressionException event) {
             //XPathExpressionException event
             event.printStackTrace();
@@ -93,6 +101,7 @@ public class WebLast {
                 String link = (String) xPath.evaluate("link/text()", node, XPathConstants.STRING);
                 gamesparkItemList.add(new Item(title, description, link));
             }
+            webLast.extractGameName(gamesparkItemList, gameName);
         } catch (MalformedURLException | XPathExpressionException event) {
             //XPathExpressionException event
             event.printStackTrace();
@@ -110,6 +119,7 @@ public class WebLast {
                 String link = (String) xPath.evaluate("link/text()", node, XPathConstants.STRING);
                 gamewatchItemList.add(new Item(title, description, link));
             }
+            webLast.extractGameName(gamewatchItemList, gameName);
         } catch (MalformedURLException | XPathExpressionException event) {
             //XPathExpressionException event
             event.printStackTrace();
@@ -128,16 +138,19 @@ public class WebLast {
                 String link = (String) xPath.evaluate("link/text()", node, XPathConstants.STRING);
                 insideItemList.add(new Item(title, description, link));
             }
+            webLast.extractGameName(insideItemList, gameName);
         } catch (MalformedURLException | XPathExpressionException event) {
             //XPathExpressionException event
             event.printStackTrace();
         }
-/*全要素表示
+//全要素表示
+/*
         for (Item item : steamNewsItemList) {
             System.out.println(item.title);
             System.out.println(item.description);
             System.out.println(item.link);
         }
+
         for (Item item : steamTopSellingItemList) {
             System.out.println(item.title);
             System.out.println(item.description);
@@ -163,10 +176,49 @@ public class WebLast {
             System.out.println(item.description);
             System.out.println(item.link);
         }
+*/
+        for (Item item : forgamerItemList) {
+            //System.out.println(item.title);
+            // System.out.println(item.description);
+            //  System.out.println(item.link);
+        }
+        System.out.println("ここからデータ");
+        /*
+        for (String string : gameName) {
+            System.out.println(string);
+            System.out.println("putout");
+        }
         */
 //鍵括弧内(主にゲーム名)のみ抽出
 
     }
+
+    void extractGameName(List list, ArrayList arrayList) {
+        String regex = ".*『(.*)』.*|.*「(.*)」.*";
+        Pattern pattern = Pattern.compile(regex);
+        List<Item> itemList = list;
+        for (Item item : itemList) {
+            Matcher matcher = pattern.matcher(item.title);
+            if (matcher.find()) {
+                arrayList.add(matcher.group(1));
+                System.out.println(item.title);
+                System.out.println(matcher.group(1));
+            }
+        }
+    }
+    /*
+    void extractGameName(List list, ArrayList arrayList) {
+        String regex = ".*『(.*)』.*|.*「(.*)」.*";
+        Pattern pattern = Pattern.compile(regex);
+        List<Item> itemList = list;
+        for (Item item : itemList) {
+            Matcher matcher = pattern.matcher(item.title);
+            if (matcher.find()) {
+                arrayList.add(item.title);
+            }
+        }
+    }
+     */
 
     static Document ConvertURLToXML(URL url) {
         try {
