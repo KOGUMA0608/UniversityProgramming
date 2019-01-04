@@ -19,12 +19,32 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 public class WebLast {
     public static void main(String[] args) {
+        LinkedHashMap<String, Integer> totalMap = new LinkedHashMap<>();
+        LinkedHashMap<String, Integer> forgamerMap = new LinkedHashMap<>();
+        LinkedHashMap<String, Integer> notForgamerMap = new LinkedHashMap<>();
+        LinkedHashMap<String, Integer> gamesparkMap = new LinkedHashMap<>();
+        LinkedHashMap<String, Integer> notGamesparkMap = new LinkedHashMap<>();
+        LinkedHashMap<String, Integer> gamewatchMap = new LinkedHashMap<>();
+        LinkedHashMap<String, Integer> notGamewatchMap = new LinkedHashMap<>();
+        LinkedHashMap<String, Integer> insideMap = new LinkedHashMap<>();
+        LinkedHashMap<String, Integer> notInsideMap = new LinkedHashMap<>();
+        LinkedHashMap<String, Integer> filalMap = new LinkedHashMap<>();
+        ElementCounter elementCounter = new ElementCounter();
         ArrayList<String> gameName = new ArrayList();
         WebLast webLast = new WebLast();
 
@@ -69,7 +89,7 @@ public class WebLast {
         }
 
         List<Item> forgamerItemList = new ArrayList<Item>();
-
+        ArrayList<String> forgamerElements = new ArrayList();
         try {
             //Forgamer用
             Document Forgamer = ConvertURLToXMLByBrowser(new URL("https://www.4gamer.net/rss/pc/pc_news.xml"));
@@ -82,13 +102,13 @@ public class WebLast {
                 String link = (String) xPath.evaluate("link/text()", node, XPathConstants.STRING);
                 forgamerItemList.add(new Item(title, description, link));
             }
-            webLast.extractGameName(forgamerItemList, gameName);
+            webLast.extractGameName(forgamerItemList, forgamerElements);
         } catch (MalformedURLException | XPathExpressionException event) {
             //XPathExpressionException event
             event.printStackTrace();
         }
         List<Item> gamesparkItemList = new ArrayList<Item>();
-
+        ArrayList<String> gamesparkElements = new ArrayList();
         try {
             //gamespark用
             Document Gamespark = ConvertURLToXMLByBrowser(new URL("https://www.gamespark.jp/rss/index.rdf"));
@@ -101,12 +121,13 @@ public class WebLast {
                 String link = (String) xPath.evaluate("link/text()", node, XPathConstants.STRING);
                 gamesparkItemList.add(new Item(title, description, link));
             }
-            webLast.extractGameName(gamesparkItemList, gameName);
+            webLast.extractGameName(gamesparkItemList, gamesparkElements);
         } catch (MalformedURLException | XPathExpressionException event) {
             //XPathExpressionException event
             event.printStackTrace();
         }
         List<Item> gamewatchItemList = new ArrayList<Item>();
+        ArrayList<String> gamewatchElements = new ArrayList();
         try {
             //gamewatch用
             Document Gamewatch = ConvertURLToXMLByBrowser(new URL("https://game.watch.impress.co.jp/data/rss/1.0/gmw/feed.rdf"));
@@ -119,13 +140,14 @@ public class WebLast {
                 String link = (String) xPath.evaluate("link/text()", node, XPathConstants.STRING);
                 gamewatchItemList.add(new Item(title, description, link));
             }
-            webLast.extractGameName(gamewatchItemList, gameName);
+            webLast.extractGameName(gamewatchItemList, gamewatchElements);
         } catch (MalformedURLException | XPathExpressionException event) {
             //XPathExpressionException event
             event.printStackTrace();
         }
 
         List<Item> insideItemList = new ArrayList<Item>();
+        ArrayList<String> insideElements = new ArrayList();
         try {
             //inside用
             Document inside = ConvertURLToXMLByBrowser(new URL("https://www.inside-games.jp/rss/index.rdf"));
@@ -138,7 +160,7 @@ public class WebLast {
                 String link = (String) xPath.evaluate("link/text()", node, XPathConstants.STRING);
                 insideItemList.add(new Item(title, description, link));
             }
-            webLast.extractGameName(insideItemList, gameName);
+            webLast.extractGameName(insideItemList, insideElements);
         } catch (MalformedURLException | XPathExpressionException event) {
             //XPathExpressionException event
             event.printStackTrace();
@@ -176,33 +198,128 @@ public class WebLast {
             System.out.println(item.description);
             System.out.println(item.link);
         }
-*/
         for (Item item : forgamerItemList) {
             //System.out.println(item.title);
             // System.out.println(item.description);
             //  System.out.println(item.link);
         }
-        System.out.println("ここからデータ");
-        /*
-        for (String string : gameName) {
+        System.out.println("Forgamer");
+        for (String string : forgamerElements) {
             System.out.println(string);
-            System.out.println("putout");
         }
-        */
-//鍵括弧内(主にゲーム名)のみ抽出
+        System.out.println("Gamespark");
+        for (String string : gamesparkElements) {
+            System.out.println(string);
+        }
+        System.out.println("Gamewatch");
+        for (String string : gamewatchElements) {
+            System.out.println(string);
+        }
+        System.out.println("Inside");
+        for (String string : insideElements) {
+            System.out.println(string);
+        }
+*/
+        //全体図
+        elementCounter.mapping(totalMap, forgamerElements);
+        elementCounter.mapping(totalMap, gamesparkElements);
+        elementCounter.mapping(totalMap, gamewatchElements);
+        elementCounter.mapping(totalMap, insideElements);
 
+        //forgamerとそうでは無い物
+        elementCounter.mapping(forgamerMap, forgamerElements);
+        elementCounter.mapping(notForgamerMap, gamesparkElements);
+        elementCounter.mapping(notForgamerMap, gamewatchElements);
+        elementCounter.mapping(notForgamerMap, insideElements);
+
+        //gamesparkとそうでは無い物
+        elementCounter.mapping(gamesparkMap, gamesparkElements);
+        elementCounter.mapping(notGamesparkMap, forgamerElements);
+        elementCounter.mapping(notGamesparkMap, gamewatchElements);
+        elementCounter.mapping(notGamesparkMap, insideElements);
+
+        //gamewatchとそうでは無い物
+        elementCounter.mapping(gamewatchMap, gamewatchElements);
+        elementCounter.mapping(notGamewatchMap, forgamerElements);
+        elementCounter.mapping(notGamewatchMap, gamesparkElements);
+        elementCounter.mapping(notGamewatchMap, insideElements);
+
+        //insideとそうでは無い物
+        elementCounter.mapping(insideMap, insideElements);
+        elementCounter.mapping(notInsideMap, forgamerElements);
+        elementCounter.mapping(notInsideMap, gamesparkElements);
+        elementCounter.mapping(notInsideMap, gamewatchElements);
+
+        for (String comp : forgamerMap.keySet()) {
+            for (String notComp : notForgamerMap.keySet()) {
+                if (comp.equals(notComp)) {
+                    filalMap.put(comp, forgamerMap.get(comp));
+                    break;
+                }
+            }
+        }
+        for (String comp : gamesparkMap.keySet()) {
+            for (String notComp : notGamesparkMap.keySet()) {
+                if (comp.equals(notComp)) {
+                    filalMap.put(comp, gamesparkMap.get(comp));
+                    break;
+                }
+            }
+        }
+        for (String comp : gamewatchMap.keySet()) {
+            for (String notComp : notGamewatchMap.keySet()) {
+                if (comp.equals(notComp)) {
+                    filalMap.put(comp, gamewatchMap.get(comp));
+                    break;
+                }
+            }
+        }
+        for (String comp : insideMap.keySet()) {
+            for (String notComp : notInsideMap.keySet()) {
+                if (comp.equals(notComp)) {
+                    filalMap.put(comp, insideMap.get(comp));
+                    break;
+                }
+            }
+        }
+        //System.out.println(filalMap.keySet());
+        ArrayList<String> finalList = new ArrayList<String>(filalMap.keySet());
+        for (String finalString : finalList) {
+            if (totalMap.containsKey(finalString)) {
+                System.out.println(finalString + "=>" + totalMap.get(finalString));
+            }
+        }
+
+        //回数順でソートするためのlist
+        List<Map.Entry<String,Integer>> entries =
+                new ArrayList<Map.Entry<String,Integer>>(finalList.entrySet());
+        Collections.sort(entries, new Comparator<Map.Entry<String,Integer>>() {
+
+            @Override
+            public int compare(
+                    Entry<String,Integer> entry1, Entry<String,Integer> entry2) {
+                return ((Integer)entry2.getValue()).compareTo((Integer)entry1.getValue());
+            }
+        });
+
+        // 内容を表示
+        for (Entry<String,Integer> s : entries) {
+            System.out.println("s.getKey() : " + s.getKey());
+            System.out.println("s.getValue() : " + s.getValue());
+        }
     }
 
+
+
+    //鍵括弧内(主にゲーム名)のみ抽出
     void extractGameName(List list, ArrayList arrayList) {
-        String regex = ".*『(.*)』.*|.*「(.*)」.*";
+        String regex = "[『「](.*?)[』」]";
         Pattern pattern = Pattern.compile(regex);
         List<Item> itemList = list;
         for (Item item : itemList) {
             Matcher matcher = pattern.matcher(item.title);
-            if (matcher.find()) {
+            while (matcher.find()) {
                 arrayList.add(matcher.group(1));
-                System.out.println(item.title);
-                System.out.println(matcher.group(1));
             }
         }
     }
