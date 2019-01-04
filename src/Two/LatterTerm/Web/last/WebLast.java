@@ -289,26 +289,7 @@ public class WebLast {
                 System.out.println(finalString + "=>" + totalMap.get(finalString));
             }
         }
-
-        //回数順でソートするためのlist
-        List<Map.Entry<String,Integer>> entries =
-                new ArrayList<Map.Entry<String,Integer>>(finalList.entrySet());
-        Collections.sort(entries, new Comparator<Map.Entry<String,Integer>>() {
-
-            @Override
-            public int compare(
-                    Entry<String,Integer> entry1, Entry<String,Integer> entry2) {
-                return ((Integer)entry2.getValue()).compareTo((Integer)entry1.getValue());
-            }
-        });
-
-        // 内容を表示
-        for (Entry<String,Integer> s : entries) {
-            System.out.println("s.getKey() : " + s.getKey());
-            System.out.println("s.getValue() : " + s.getValue());
-        }
     }
-
 
 
     //鍵括弧内(主にゲーム名)のみ抽出
