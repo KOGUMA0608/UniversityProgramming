@@ -11,25 +11,24 @@ public class temporary {
     Scanner scanner = new Scanner(System.in);
     Map<Integer, Integer> sort = new TreeMap<>(Comparator.reverseOrder());
     Map<Integer, Integer> finalMap = new TreeMap<>(Comparator.reverseOrder());
+    Map<Integer, Integer> outputMap = new TreeMap<>();
 
-    int n = 32767;
+    int n = 327700;
     Map<Integer, Integer> map = new HashMap<>();
     Map<Integer, Integer> compMap = new HashMap<>();
     int iso = 10;
+    boolean first;
+    String filename = scanner.next();
 
     public static void main(String[] args) {
-
-
         temporary temporary = new temporary();
         temporary.input();
         temporary.make();
         temporary.output();
-
     }
 
     public void input() {
         System.out.println("波長グラフの名前は?");
-        //String filename = scanner.next();
         System.out.println("基本波は?");
         int kari = scanner.nextInt();
         int kari2 = kari;
@@ -38,13 +37,21 @@ public class temporary {
             kari += kari2;
         }
         try {
-            InputStream data = new FileInputStream("spectrum.txt");
+            InputStream data = new FileInputStream("./Music/" + filename + ".txt");
             InputStreamReader tmp = new InputStreamReader(data);
             BufferedReader reader = new BufferedReader(tmp);
             for (int i = 0; i < n; i++) {
                 String frequency = null;
                 String level = null;
+                if (!first) {
+                    first = true;
+                    String notline = reader.readLine();
+                    continue;
+                }
                 String line = reader.readLine();
+                if (line == null) {
+                    break;
+                }
                 //System.out.println(line);
                 String regex = "(\\S*+)(\\s)(\\S+)";
                 Pattern pattern = Pattern.compile(regex);
@@ -107,6 +114,7 @@ public class temporary {
                 if (!yes) {
                     yes = true;
                     System.out.println(key + ":" + data);
+                    outputMap.put(data, key);
                 }
             }
             yes = false;
@@ -122,12 +130,13 @@ public class temporary {
         // 1行に1レコード
         System.out.println("出力したいファイルの名前は?");
         //String filename = scanner.next();
-        String filename = "TEST.txt";
+        //String filename = "TEST.txt";
         try {
-            PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(filename)));
-            for (Integer key : finalMap.keySet()) {
-                Integer data = finalMap.get(key);
-                writer.println("基本波" + data + "Hz" + key);
+            int i = 1;
+            PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("./A/" + filename + ".txt")));
+            for (Integer key : outputMap.keySet()) {
+                Integer data = outputMap.get(key);
+                writer.println("基本波" + key + "Hz " + data + "dB");
             }
             writer.close();
         } catch (IOException e) {
