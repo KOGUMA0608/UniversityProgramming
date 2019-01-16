@@ -9,12 +9,12 @@ import java.util.regex.Pattern;
 public class temporary {
     int[] frequency = new int[10];
     Scanner scanner = new Scanner(System.in);
-    Map<Integer, Integer> sort = new TreeMap<>(Comparator.reverseOrder());
-    Map<Integer, Integer> finalMap = new TreeMap<>(Comparator.reverseOrder());
-    Map<Integer, Integer> outputMap = new TreeMap<>();
+    Map<Integer, Double> sort = new TreeMap<>(Comparator.reverseOrder());
+    Map<Double, Integer> finalMap = new TreeMap<>(Comparator.reverseOrder());
+    Map<Integer, Double> outputMap = new TreeMap<>();
 
     int n = 327700;
-    Map<Integer, Integer> map = new HashMap<>();
+    Map<Integer, Double> dataMap = new HashMap<>();
     Map<Integer, Integer> compMap = new HashMap<>();
     int iso = 10;
     boolean first;
@@ -60,15 +60,15 @@ public class temporary {
                     frequency = matcher.group(1);
                     level = matcher.group(3);
                     //ここで精度をDoublからintに変換
-                    map.put((int) Math.round(Double.parseDouble(frequency)), (int) Math.round(Double.parseDouble(level)));
+                    dataMap.put((int) Math.round(Double.parseDouble(frequency)), Double.valueOf(level));
                 }
             }
             reader.close();
         } catch (IOException e) {
             System.out.println(e);
         }
-        for (Integer key : map.keySet()) {
-            Integer data = map.get(key);
+        for (Integer key : dataMap.keySet()) {
+            Double data = dataMap.get(key);
             //System.out.println(key + ": " + data);
         }
     }
@@ -79,16 +79,16 @@ public class temporary {
         int max = 0;
         Map<Integer, Integer> reverseMap = new HashMap<Integer, Integer>();
         int n = 10;
-        int nowMax = 0;
-        for (Integer key : map.keySet()) {
-            Integer data = map.get(key);
+        Double nowMax = (double) 0;
+        for (Integer key : dataMap.keySet()) {
+            Double data = dataMap.get(key);
             // System.out.println(key + ": " + data);
 
         }
         for (int i = 0; i < frequency.length; i++) {
 
-            for (Integer key : map.keySet()) {
-                Integer data = map.get(key);
+            for (Integer key : dataMap.keySet()) {
+                Double data = dataMap.get(key);
                 if (frequency[i] + iso >= key && frequency[i] - iso <= key) {
                     sort.put(key, data);
 
@@ -99,7 +99,7 @@ public class temporary {
             }
 
             for (Integer key : sort.keySet()) {
-                Integer data = sort.get(key);
+                Double data = sort.get(key);
                 if (nowMax < data) {
                     nowMax = data;
                 }
@@ -109,7 +109,7 @@ public class temporary {
             }
             sort.clear();
             System.out.println("周波数" + frequency[i] + "は:");
-            for (Integer key : finalMap.keySet()) {
+            for (Double key : finalMap.keySet()) {
                 Integer data = finalMap.get(key);
                 if (!yes) {
                     yes = true;
@@ -135,7 +135,7 @@ public class temporary {
             int i = 1;
             PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("./A/" + filename + ".txt")));
             for (Integer key : outputMap.keySet()) {
-                Integer data = outputMap.get(key);
+                Double data = outputMap.get(key);
                 writer.println("基本波" + key + "Hz " + data + "dB");
             }
             writer.close();
